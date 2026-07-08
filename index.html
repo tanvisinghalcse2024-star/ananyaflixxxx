@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ananya Flix — Birthday Special</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Playfair+Display:ital,wght@0,600;1,500&family=Cormorant+Garamond:ital,wght@0,500;1,500&display=swap');
+
+    :root{
+      --black: #050203;
+      --crimson: #E01A3D;
+      --crimson-light: #FF4A62;
+      --crimson-dim: #7A0E20;
+      --gold: #E8C77E;
+      --ivory: #F4EDE4;
+    }
+
+    *{ box-sizing:border-box; margin:0; padding:0; }
+
+    html,body{
+      background:var(--black);
+      font-family:'Cormorant Garamond', serif;
+      color:var(--ivory);
+    }
+
+    /* ========== INTRO/SPLASH SCREEN ========== */
+    .splash-screen{
+      position:fixed;
+      inset:0;
+      background:var(--black);
+      z-index:9999;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      overflow:hidden;
+    }
+
+    .splash-screen.hide{
+      animation: splashFade 0.8s ease forwards;
+    }
+
+    @keyframes splashFade{
+      to{ opacity:0; pointer-events:none; }
+    }
+
+    .stage{
+      position:relative;
+      width:100%;
+      height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      cursor:pointer;
+    }
+
+    .stage::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:radial-gradient(ellipse at center, rgba(224,26,61,0.10) 0%, rgba(0,0,0,0) 55%, rgba(0,0,0,0.85) 100%);
+      pointer-events:none;
+      z-index:5;
+    }
+
+    .scene{
+      position:absolute;
+      inset:0;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      opacity:0;
+    }
+
+    #scene-n{ z-index:2; }
+    #scene-n.play{ animation: fadeIn 250ms ease forwards, fadeOut 400ms ease 1500ms forwards; }
+
+    .n-mark{
+      width:min(38vw, 190px);
+      filter: drop-shadow(0 0 18px rgba(224,26,61,0.85)) drop-shadow(0 0 46px rgba(224,26,61,0.5));
+      opacity:0;
+    }
+
+    #scene-n.play .n-mark{ animation: fadeIn 200ms ease forwards, nPulse 900ms ease-in-out 950ms forwards; }
+
+    .n-piece{
+      transform-box: fill-box;
+      transform-origin: center;
+      transform: scaleY(0.05);
+      opacity:0;
+    }
+
+    #scene-n.play .n-left{ animation: pieceGrow 550ms cubic-bezier(.2,.85,.3,1) 100ms forwards; }
+    #scene-n.play .n-diag{ animation: pieceGrow 600ms cubic-bezier(.2,.85,.3,1) 260ms forwards; }
+    #scene-n.play .n-right{ animation: pieceGrow 550ms cubic-bezier(.2,.85,.3,1) 420ms forwards; }
+
+    @keyframes pieceGrow{
+      0%{ transform:scaleY(0.05); opacity:0; }
+      50%{ opacity:1; }
+      100%{ transform:scaleY(1); opacity:1; }
+    }
+
+    @keyframes nPulse{
+      0%{ transform:scale(1); }
+      35%{ transform:scale(1.1); filter: drop-shadow(0 0 30px rgba(255,74,98,0.95)) drop-shadow(0 0 70px rgba(224,26,61,0.7)); }
+      100%{ transform:scale(1.32); opacity:1; }
+    }
+
+    #scene-logo{ z-index:3; }
+
+    .logo-text{
+      font-family:'Bebas Neue', sans-serif;
+      font-size:clamp(48px, 11vw, 128px);
+      letter-spacing:6px;
+      color:var(--crimson);
+      text-shadow: 0 0 8px rgba(224,26,61,0.9), 0 0 30px rgba(224,26,61,0.6), 0 0 60px rgba(224,26,61,0.35);
+      opacity:0;
+    }
+
+    #scene-logo.play{ animation: fadeIn 200ms ease 1650ms forwards, fadeOut 500ms ease 3500ms forwards; }
+    #scene-logo.play .logo-text{ animation: flickerZoom 1900ms ease-out 1750ms forwards; }
+
+    @keyframes flickerZoom{
+      0%{ opacity:0; transform:scale(0.82); }
+      8%{ opacity:1; }
+      12%{ opacity:0.3; }
+      16%{ opacity:1; }
+      22%{ opacity:0.5; }
+      28%{ opacity:1; transform:scale(0.9); }
+      70%{ opacity:1; transform:scale(1.28); }
+      100%{ opacity:1; transform:scale(1.55); }
+    }
+
+    .original-tag{
+      position:absolute;
+      bottom:38%;
+      left:50%;
+      transform:translateX(-50%);
+      font-family:'Cormorant Garamond', serif;
+      font-weight:500;
+      letter-spacing:5px;
+      font-size:14px;
+      color:var(--ivory);
+      text-transform:uppercase;
+      opacity:0;
+    }
+
+    #scene-logo.play .original-tag{ animation: fadeIn 500ms ease 2700ms forwards; }
+
+    #scene-card{
+      z-index:4;
+      flex-direction:column;
+      text-align:center;
+      gap:18px;
+    }
+
+    #scene-card.play{ animation: fadeIn 900ms ease 3650ms forwards; }
+
+    .eyebrow{
+      font-family:'Cormorant Garamond', serif;
+      font-weight:500;
+      font-style:italic;
+      letter-spacing:4px;
+      text-transform:uppercase;
+      font-size:15px;
+      color:var(--gold);
+      opacity:0;
+    }
+
+    .heroine{
+      font-family:'Playfair Display', serif;
+      font-weight:600;
+      font-size:clamp(42px, 8vw, 92px);
+      color:var(--ivory);
+      letter-spacing:2px;
+      opacity:0;
+      position:relative;
+    }
+
+    .heroine::after{
+      content:"";
+      display:block;
+      width:0%;
+      height:1px;
+      background:var(--crimson);
+      margin:14px auto 0;
+    }
+
+    .tagline{
+      font-family:'Cormorant Garamond', serif;
+      font-style:italic;
+      font-weight:500;
+      font-size:clamp(18px, 2.6vw, 26px);
+      color:rgba(244,237,228,0.82);
+      opacity:0;
+      max-width:600px;
+      line-height:1.5;
+    }
+
+    #scene-card.play .eyebrow{ animation: fadeIn 700ms ease 3900ms forwards; }
+    #scene-card.play .heroine{ animation: fadeIn 900ms ease 4250ms forwards; }
+    #scene-card.play .heroine::after{ animation: lineGrow 900ms ease 4500ms forwards; }
+    #scene-card.play .tagline{ animation: fadeIn 900ms ease 5000ms forwards; }
+
+    @keyframes lineGrow{ to{ width:120px; } }
+    @keyframes fadeIn{ from{ opacity:0; } to{ opacity:1; } }
+    @keyframes fadeOut{ from{ opacity:1; } to{ opacity:0; } }
+
+    .replay{
+      position:absolute;
+      bottom:28px;
+      right:28px;
+      z-index:10;
+      font-family:'Cormorant Garamond', serif;
+      letter-spacing:2px;
+      text-transform:uppercase;
+      font-size:12px;
+      color:rgba(244,237,228,0.55);
+      background:transparent;
+      border:1px solid rgba(244,237,228,0.3);
+      padding:8px 16px;
+      border-radius:2px;
+      cursor:pointer;
+      opacity:0;
+      transition:opacity 400ms ease, color 200ms ease, border-color 200ms ease;
+    }
+    .replay.show{ opacity:1; }
+    .replay:hover{ color:var(--gold); border-color:var(--gold); }
+
+    .hint{
+      position:absolute;
+      top:28px;
+      left:50%;
+      transform:translateX(-50%);
+      font-family:'Cormorant Garamond', serif;
+      font-style:italic;
+      font-size:13px;
+      letter-spacing:1px;
+      color:rgba(244,237,228,0.4);
+      z-index:10;
+      opacity:1;
+      transition:opacity 500ms ease;
+    }
+    .hint.hide{ opacity:0; }
+
+    /* ========== MAIN CONTENT ========== */
+    .main-content{
+      min-height:100vh;
+      background:var(--black);
+      opacity:0;
+      display:none;
+      animation: contentFadeIn 0.8s ease forwards;
+    }
+
+    @keyframes contentFadeIn{
+      to{ opacity:1; }
+    }
+
+    .navbar{
+      position:sticky;
+      top:0;
+      z-index:100;
+      padding:20px 40px;
+      background:linear-gradient(to bottom, rgba(0,0,0,0.9), transparent);
+      backdrop-filter:blur(10px);
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+    }
+
+    .logo{
+      font-family:'Bebas Neue', sans-serif;
+      font-size:28px;
+      font-weight:900;
+      letter-spacing:2px;
+    }
+
+    .logo .red{ color:var(--crimson); }
+    .logo .white{ color:var(--ivory); }
+
+    nav a{
+      color:var(--ivory);
+      text-decoration:none;
+      margin:0 20px;
+      font-size:14px;
+      letter-spacing:1px;
+      transition:color 0.3s ease;
+    }
+
+    nav a:hover{ color:var(--crimson); }
+
+    .hero{
+      height:80vh;
+      background:linear-gradient(135deg, rgba(224,26,61,0.15) 0%, rgba(122,14,32,0.1) 100%);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      text-align:center;
+      position:relative;
+      overflow:hidden;
+    }
+
+    .hero::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:radial-gradient(circle at center, rgba(232,199,126,0.1) 0%, transparent 70%);
+      animation: glow 8s ease-in-out infinite;
+    }
+
+    @keyframes glow{
+      0%, 100%{ transform:scale(1); opacity:0.5; }
+      50%{ transform:scale(1.1); opacity:0.8; }
+    }
+
+    .hero-content{
+      position:relative;
+      z-index:2;
+      max-width:800px;
+      padding:40px;
+    }
+
+    .hero-content h1{
+      font-family:'Playfair Display', serif;
+      font-size:clamp(48px, 8vw, 96px);
+      margin-bottom:20px;
+      color:var(--crimson);
+      text-shadow:0 0 30px rgba(224,26,61,0.6);
+    }
+
+    .hero-content p{
+      font-size:clamp(18px, 2.5vw, 24px);
+      color:rgba(244,237,228,0.9);
+      margin-bottom:40px;
+      line-height:1.8;
+    }
+
+    .cta-buttons{
+      display:flex;
+      gap:20px;
+      justify-content:center;
+      flex-wrap:wrap;
+    }
+
+    .btn{
+      padding:14px 32px;
+      font-size:14px;
+      font-weight:700;
+      letter-spacing:2px;
+      text-transform:uppercase;
+      border:none;
+      border-radius:4px;
+      cursor:pointer;
+      transition:all 0.3s ease;
+      font-family:'Cormorant Garamond', serif;
+    }
+
+    .btn-primary{
+      background:var(--crimson);
+      color:white;
+    }
+
+    .btn-primary:hover{
+      background:var(--crimson-light);
+      box-shadow:0 0 20px rgba(224,26,61,0.6);
+    }
+
+    .btn-secondary{
+      background:transparent;
+      color:var(--gold);
+      border:1px solid var(--gold);
+    }
+
+    .btn-secondary:hover{
+      background:var(--gold);
+      color:var(--black);
+    }
+
+    .section{
+      padding:80px 40px;
+      text-align:center;
+    }
+
+    .section h2{
+      font-family:'Playfair Display', serif;
+      font-size:clamp(36px, 5vw, 64px);
+      color:var(--crimson);
+      margin-bottom:40px;
+      text-transform:uppercase;
+      letter-spacing:3px;
+    }
+
+    .gallery{
+      display:grid;
+      grid-template-columns:repeat(auto-fit, minmax(280px, 1fr));
+      gap:30px;
+      max-width:1200px;
+      margin:0 auto;
+    }
+
+    .gallery-card{
+      background:linear-gradient(135deg, rgba(224,26,61,0.2) 0%, rgba(122,14,32,0.1) 100%);
+      padding:30px;
+      border-radius:8px;
+      border:1px solid rgba(232,199,126,0.3);
+      transition:all 0.3s ease;
+      cursor:pointer;
+    }
+
+    .gallery-card:hover{
+      transform:translateY(-10px);
+      border-color:var(--crimson);
+      box-shadow:0 20px 40px rgba(224,26,61,0.3);
+    }
+
+    .gallery-card h3{
+      font-family:'Playfair Display', serif;
+      font-size:24px;
+      color:var(--gold);
+      margin-bottom:15px;
+    }
+
+    .gallery-card p{
+      color:rgba(244,237,228,0.8);
+      line-height:1.8;
+    }
+
+    .timeline{
+      max-width:800px;
+      margin:0 auto;
+      position:relative;
+    }
+
+    .timeline::before{
+      content:"";
+      position:absolute;
+      left:50%;
+      transform:translateX(-50%);
+      width:2px;
+      height:100%;
+      background:linear-gradient(to bottom, var(--crimson), transparent);
+    }
+
+    .timeline-item{
+      margin-bottom:50px;
+      position:relative;
+    }
+
+    .timeline-item:nth-child(odd) .timeline-content{
+      margin-left:0;
+      margin-right:auto;
+      padding-right:50px;
+      width:45%;
+      text-align:right;
+    }
+
+    .timeline-item:nth-child(even) .timeline-content{
+      margin-left:auto;
+      margin-right:0;
+      padding-left:50px;
+      width:45%;
+      text-align:left;
+    }
+
+    .timeline-dot{
+      position:absolute;
+      left:50%;
+      transform:translateX(-50%);
+      width:12px;
+      height:12px;
+      background:var(--crimson);
+      border:3px solid var(--black);
+      border-radius:50%;
+      top:0;
+    }
+
+    .timeline-content h3{
+      font-family:'Playfair Display', serif;
+      color:var(--gold);
+      font-size:18px;
+      margin-bottom:10px;
+    }
+
+    .timeline-content p{
+      color:rgba(244,237,228,0.8);
+      font-size:14px;
+    }
+
+    .footer{
+      padding:40px;
+      text-align:center;
+      border-top:1px solid rgba(232,199,126,0.2);
+      background:rgba(0,0,0,0.5);
+    }
+
+    .footer p{
+      color:rgba(244,237,228,0.6);
+      font-size:14px;
+    }
+
+    @media (max-width:768px){
+      .navbar{ padding:15px 20px; }
+      .section{ padding:50px 20px; }
+      .timeline::before{ left:20px; }
+      .timeline-item:nth-child(odd) .timeline-content,
+      .timeline-item:nth-child(even) .timeline-content{
+        width:100%;
+        margin:0;
+        padding:0 0 0 60px;
+        text-align:left;
+      }
+      .timeline-dot{ left:20px; }
+      .hero-content{ padding:20px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- SPLASH SCREEN -->
+<div class="splash-screen" id="splashScreen">
+  <div class="stage" id="stage">
+    <div class="hint" id="hint">tap or click to begin</div>
+
+    <div class="scene" id="scene-n">
+      <svg class="n-mark" viewBox="0 0 200 260">
+        <defs>
+          <linearGradient id="nGrad" x1="0" y1="0" x2="200" y2="260" gradientUnits="userSpaceOnUse">
+            <stop offset="0%" stop-color="#FF4A62"/>
+            <stop offset="50%" stop-color="#E01A3D"/>
+            <stop offset="100%" stop-color="#7A0E20"/>
+          </linearGradient>
+        </defs>
+        <path class="n-piece n-left" fill="url(#nGrad)" d="M 30 20 L 70 20 L 70 240 L 44 240 L 30 226 Z"/>
+        <path class="n-piece n-diag" fill="url(#nGrad)" d="M 30 20 L 70 20 L 170 240 L 130 240 Z"/>
+        <path class="n-piece n-right" fill="url(#nGrad)" d="M 130 240 L 170 240 L 170 34 L 156 20 L 130 20 Z"/>
+      </svg>
+    </div>
+
+    <div class="scene" id="scene-logo">
+      <div class="logo-text">ANANYAFLIX</div>
+      <div class="original-tag">Birthday Special</div>
+    </div>
+
+    <div class="scene" id="scene-card">
+      <div class="eyebrow">Starring</div>
+      <div class="heroine">Ananya</div>
+      <div class="tagline">The Girl Who Makes Every Memory Better</div>
+    </div>
+
+    <button class="replay" id="replay">Replay intro</button>
+  </div>
+</div>
+
+<!-- MAIN CONTENT -->
+<div class="main-content" id="mainContent">
+  <header class="navbar">
+    <div class="logo">
+      <span class="red">Ananya</span><span class="white">flix</span>
+    </div>
+    <nav>
+      <a href="#about">About</a>
+      <a href="#gallery">Gallery</a>
+      <a href="#timeline">Timeline</a>
+      <a href="#wishes">Wishes</a>
+    </nav>
+  </header>
+
+  <section class="hero" id="about">
+    <div class="hero-content">
+      <h1>🎉 Happy Birthday Ananya! 🎉</h1>
+      <p>Celebrating the incredible person you are & all the amazing memories we've created together</p>
+      <div class="cta-buttons">
+        <button class="btn btn-primary" onclick="scrollTo('gallery')">View Memories</button>
+        <button class="btn btn-secondary" onclick="scrollTo('wishes')">Send Wishes</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="gallery">
+    <h2>✨ Moments We Treasure ✨</h2>
+    <div class="gallery">
+      <div class="gallery-card">
+        <h3>🌟 First Meeting</h3>
+        <p>The day our story began. A moment that changed everything and led to countless beautiful memories together.</p>
+      </div>
+      <div class="gallery-card">
+        <h3>❤️ Late Night Talks</h3>
+        <p>Hours of conversations under the stars, sharing dreams, fears, and everything in between. Irreplaceable moments.</p>
+      </div>
+      <div class="gallery-card">
+        <h3>🎊 Adventures</h3>
+        <p>Every trip, every spontaneous plan, every unexpected detour made special because you were there.</p>
+      </div>
+      <div class="gallery-card">
+        <h3>😊 Everyday Magic</h3>
+        <p>The ordinary moments that became extraordinary. Laughter in the car, inside jokes, and simple time together.</p>
+      </div>
+      <div class="gallery-card">
+        <h3>🎈 Your Smile</h3>
+        <p>That infectious laugh that lights up any room. The warmth you bring to everyone around you.</p>
+      </div>
+      <div class="gallery-card">
+        <h3>🌹 Growing Together</h3>
+        <p>From the beginning till now—watching you grow, achieve, inspire. I'm proud of every step you take.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="timeline">
+    <h2>📅 Our Timeline 📅</h2>
+    <div class="timeline">
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <div class="timeline-content">
+          <h3>The Beginning</h3>
+          <p>When we first met & everything changed</p>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <div class="timeline-content">
+          <h3>First Adventure</h3>
+          <p>Our first trip together & countless moments</p>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <div class="timeline-content">
+          <h3>Growing Closer</h3>
+          <p>Inside jokes, late night calls & deep conversations</p>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <div class="timeline-content">
+          <h3>Today</h3>
+          <p>Your birthday celebration & countless more memories to come</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="wishes">
+    <h2>💌 Special Wishes 💌</h2>
+    <div style="max-width:600px; margin:0 auto; background:rgba(232,199,126,0.1); padding:40px; border-radius:8px; border:1px solid rgba(232,199,126,0.3);">
+      <p style="font-size:18px; line-height:2; color:var(--ivory); margin-bottom:20px;">
+        May this year bring you endless joy & success. May you achieve all your dreams & deserve everything beautiful. 
+        Thank you for being the amazing person you are & for all the memories we've created together. 
+        Here's to more laughter, more adventures & a lifetime of happiness! 🌟
+      </p>
+      <p style="font-size:14px; color:var(--gold); letter-spacing:2px;">
+        With all my love 💕
+      </p>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <p>🎉 Made with ❤️ | Happy Birthday to the Most Special Person 🎉</p>
+  </footer>
+</div>
+
+<script>
+  const splashScreen = document.getElementById('splashScreen');
+  const mainContent = document.getElementById('mainContent');
+  const stage = document.getElementById('stage');
+  const hint = document.getElementById('hint');
+  const sceneN = document.getElementById('scene-n');
+  const sceneLogo = document.getElementById('scene-logo');
+  const sceneCard = document.getElementById('scene-card');
+  const replayBtn = document.getElementById('replay');
+
+  let audioCtx = null;
+  let played = false;
+
+  function thump(ctx, startTime, freq, dur, gainPeak){
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(freq, startTime);
+    osc.frequency.exponentialRampToValueAtTime(freq * 0.5, startTime + dur);
+    gain.gain.setValueAtTime(0.0001, startTime);
+    gain.gain.exponentialRampToValueAtTime(gainPeak, startTime + 0.02);
+    gain.gain.exponentialRampToValueAtTime(0.0001, startTime + dur);
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.start(startTime);
+    osc.stop(startTime + dur + 0.05);
+  }
+
+  function tick(ctx, startTime, gainPeak){
+    const bufferSize = ctx.sampleRate * 0.04;
+    const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+    const data = buffer.getChannelData(0);
+    for(let i=0; i<bufferSize; i++){
+      data[i] = (Math.random()*2-1) * (1 - i/bufferSize);
+    }
+    const noise = ctx.createBufferSource();
+    noise.buffer = buffer;
+    const filter = ctx.createBiquadFilter();
+    filter.type = 'highpass';
+    filter.frequency.value = 1800;
+    const gain = ctx.createGain();
+    gain.gain.setValueAtTime(gainPeak, startTime);
+    gain.gain.exponentialRampToValueAtTime(0.0001, startTime + 0.04);
+    noise.connect(filter);
+    filter.connect(gain);
+    gain.connect(ctx.destination);
+    noise.start(startTime);
+  }
+
+  function playTudumSound(){
+    try{
+      audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)();
+      const now = audioCtx.currentTime;
+      tick(audioCtx, now, 0.25);
+      thump(audioCtx, now + 0.02, 100, 0.3, 0.65);
+      tick(audioCtx, now + 0.33, 0.2);
+      thump(audioCtx, now + 0.35, 65, 0.5, 0.75);
+    }catch(e){}
+  }
+
+  function resetScenes(){
+    [sceneN, sceneLogo, sceneCard].forEach(s => {
+      s.classList.remove('play');
+      void s.offsetWidth;
+    });
+    replayBtn.classList.remove('show');
+  }
+
+  function playIntro(){
+    if(played) return;
+    played = true;
+    hint.classList.add('hide');
+
+    sceneN.classList.add('play');
+    sceneLogo.classList.add('play');
+    sceneCard.classList.add('play');
+
+    setTimeout(playTudumSound, 1250);
+    setTimeout(() => { replayBtn.classList.add('show'); }, 6100);
+  }
+
+  stage.addEventListener('click', (e) => {
+    if(e.target === replayBtn) return;
+    if(!played){ playIntro(); }
+  });
+
+  replayBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    played = false;
+    resetScenes();
+    requestAnimationFrame(() => {
+      hint.classList.add('hide');
+      playIntro();
+    });
+  });
+
+  setTimeout(function() {
+    splashScreen.classList.add('hide');
+    setTimeout(function() {
+      splashScreen.style.display = 'none';
+      mainContent.style.display = 'block';
+    }, 800);
+  }, 6100);
+
+  function scrollTo(id){
+    const element = document.getElementById(id);
+    if(element){
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+  }
+</script>
+
+</body>
+</html>

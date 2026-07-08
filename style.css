@@ -1,0 +1,46 @@
+/* Additional responsive utilities */
+
+@media (max-width: 480px) {
+  .navbar {
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  nav {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  nav a {
+    margin: 0 10px;
+    font-size: 12px;
+  }
+
+  .gallery {
+    grid-template-columns: 1fr;
+  }
+
+  .cta-buttons {
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .btn {
+    width: 100%;
+  }
+}
+
+/* Print styles */
+@media print {
+  .splash-screen,
+  .navbar {
+    display: none;
+  }
+
+  body {
+    background: white;
+    color: black;
+  }
+}
